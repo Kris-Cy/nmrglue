@@ -326,13 +326,13 @@ def pack_table(locations, cluster_ids=None, scales=None, amps=None,
     ndim = len(locations[0])
     anames = axis_names[-ndim:]
 
-    dt = [(a + "_AXIS", float) for a in anames]
+    dt = [(f"{a}_AXIS", float) for a in anames]
     rec = np.rec.array(locations, dtype=dt)
 
     if cluster_ids is not None:
         rec = table.append_column(rec, cluster_ids, 'cID', 'int')
     if scales is not None:
-        names = [a + "_LW" for a in anames]
+        names = [f"{a}_LW" for a in anames]
         for n, c in zip(names, np.array(scales).T):
             rec = table.append_column(rec, c, n, 'float')
     if amps is not None:
@@ -535,7 +535,7 @@ def find_pseg_slice(data, location, thres):
             stop = stop + 1
             al[dim] = stop
         seg_slice.append(slice(start + 1, stop))
-    return seg_slice
+    return tuple(seg_slice)
 
 
 def find_nseg_slice(data, location, thres):
@@ -558,4 +558,4 @@ def find_nseg_slice(data, location, thres):
             stop = stop + 1
             al[dim] = stop
         seg_slice.append(slice(start + 1, stop))
-    return seg_slice
+    return tuple(seg_slice)
